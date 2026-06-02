@@ -241,11 +241,5 @@ This project is open source under the **MIT License** — you can use it freely 
 
 ---
 
-## 👨‍💻 Authors
-
-- **Aaron Chong** — [GitHub](https://github.com/aaronchong888)
-- **Hugo Ng** — [GitHub](https://github.com/hugoclong)
-
----
 
 *Made with ❤️ to help fight misinformation and deepfake content.*
