@@ -131,3 +131,21 @@ dmypy.json
 #temp dataset folders
 tmp_*/
 mtcnn/
+
+# Large dataset folders (too large to push to GitHub)
+prepared_dataset/
+split_dataset/
+train_sample_videos/aagfhgtpmv/
+train_sample_videos/aapnvogymq/
+train_sample_videos/abarnvbtwb/
+train_sample_videos/abofeumbvv/
+train_sample_videos/abqwwspghj/
+
+# Trained model checkpoints (too large for GitHub)
+tmp_checkpoint/
+
+# Temporary Flask uploads
+static/temp/
+
+# Python 3.13+ bytecode cache
+*.pyc

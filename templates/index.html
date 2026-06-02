@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepFake-Detect — Face Forgery Detection Interface</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="glowing-orb blue"></div>
+    <div class="glowing-orb pink"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-user-shield logo-icon"></i>
+                <h1>DF-Detect</h1>
+            </div>
+            <p class="subtitle">AI-Powered Deepfake & Face Forgery Classifier</p>
+        </header>
+
+        <main>
+            <div class="glass-card main-card">
+                <!-- Dropzone Section -->
+                <section class="upload-section" id="uploadSection">
+                    <div class="drop-zone" id="dropZone">
+                        <input type="file" id="fileInput" accept="image/*" class="file-input">
+                        <div class="drop-zone-content">
+                            <div class="icon-pulse">
+                                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                            </div>
+                            <h3>Drag & Drop Image</h3>
+                            <p class="upload-desc">Supports JPEG, PNG, WEBP files</p>
+                            <button class="btn btn-primary" id="browseBtn">
+                                <i class="fa-solid fa-folder-open"></i> Browse Files
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Processing / Scanning Section -->
+                <section class="scanning-section hidden" id="scanningSection">
+                    <div class="scanner-container">
+                        <div class="preview-wrapper">
+                            <img id="scanPreview" src="" alt="Scanning Preview">
+                            <div class="scan-bar"></div>
+                        </div>
+                        <div class="scanner-details">
+                            <div class="spinner"></div>
+                            <h3>Analyzing Face Geometry...</h3>
+                            <p class="pulse-text">Running EfficientNet-B0 backbone</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Results Section -->
+                <section class="results-section hidden" id="resultsSection">
+                    <div class="results-grid">
+                        <div class="results-visual">
+                            <div class="frames-container">
+                                <div class="crop-frame">
+                                    <img id="croppedFace" src="" alt="Cropped Face">
+                                    <div class="crop-badge">
+                                        <i class="fa-solid fa-crop-simple"></i> Original Face
+                                    </div>
+                                </div>
+                                <div class="crop-frame" id="heatmapFrame">
+                                    <img id="heatmapImage" src="" alt="Forgery Heatmap">
+                                    <div class="crop-badge">
+                                        <i class="fa-solid fa-fire-flame-curved"></i> Forgery Map
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="results-data">
+                            <div class="prediction-status" id="predictionStatus">
+                                <div class="result-icon-wrapper" id="resultIconWrapper">
+                                    <i class="fa-solid" id="resultIcon"></i>
+                                </div>
+                                <div class="result-text">
+                                    <span class="result-label">CLASSIFICATION</span>
+                                    <h2 class="result-verdict" id="resultVerdict">REAL</h2>
+                                </div>
+                            </div>
+
+                            <div class="confidence-container">
+                                <div class="confidence-header">
+                                    <span>Model Confidence</span>
+                                    <span class="confidence-val" id="confidenceVal">98.5%</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" id="confidenceBar"></div>
+                                </div>
+                            </div>
+
+                            <div class="metrics-panel">
+                                <div class="metric-box">
+                                    <span class="metric-title">Face Detected</span>
+                                    <span class="metric-value"><i class="fa-solid fa-circle-check text-success"></i> Yes</span>
+                                </div>
+                                <div class="metric-box">
+                                    <span class="metric-title">Raw Model Score</span>
+                                    <span class="metric-value" id="rawScore">0.985</span>
+                                </div>
+                            </div>
+
+                            <div class="actions">
+                                <button class="btn btn-secondary" id="resetBtn">
+                                    <i class="fa-solid fa-rotate-left"></i> Analyze Another Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer>
+            <p>DeepFake-Detect Pipeline Model Core • Powered by TensorFlow & Keras</p>
+        </footer>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

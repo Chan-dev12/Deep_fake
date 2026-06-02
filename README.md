@@ -1,221 +1,251 @@
-<div align="center">
+# 🔍 DeepFake-Detect
 
-# DeepFake-Detect
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-FF6F00?logo=tensorflow)](https://www.tensorflow.org/)
-[![Keras](https://img.shields.io/badge/Keras-2.2+-D00000?logo=keras)](https://keras.io/)
-[![GitHub stars](https://img.shields.io/github/stars/aaronchong888/DeepFake-Detect?style=social)](https://github.com/aaronchong888/DeepFake-Detect/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/aaronchong888/DeepFake-Detect?style=social)](https://github.com/aaronchong888/DeepFake-Detect/network/members)
-
-<p align="center">
-  <a href="https://deepfake-detect.com/"><img src="img/dfdetect-home.png" alt="DF-Detect deepfake detection web app homepage" width="70%" /></a>
-</p>
-
-**Open-source deepfake detection & face forgery detection — train your own model with TensorFlow, Keras & EfficientNet**
-
-[**Live Demo**](https://deepfake-detect.com/) · [Report Bug](https://github.com/aaronchong888/DeepFake-Detect/issues) · [Request Feature](https://github.com/aaronchong888/DeepFake-Detect/issues)
-
-</div>
+> **Can a computer tell if a face in a photo is REAL or FAKE?**
+> YES! That's exactly what this project does. 🎉
 
 ---
 
-## About
+## 🤔 What is a Deepfake?
 
-**DeepFake-Detect** is an open-source pipeline for training **deepfake detection** and **face forgery detection** models from scratch. Built with [Python](https://www.python.org), [Keras](https://keras.io), and [TensorFlow](https://www.tensorflow.org), the detector uses an **EfficientNet** backbone and is trained on major public benchmarks (FaceForensics++, Celeb-DF, DFDC, and others) to recognize synthetic faces and manipulated media.
+Imagine someone used a computer to put YOUR face on someone else's body in a video — without your permission. That's called a **deepfake**. They look very real, but they are 100% fake.
 
----
-
-## Features
-
-- **EfficientNet-based architecture** — State-of-the-art backbone with 128×128 input, global max pooling, and binary classification head (pristine vs deepfake).
-- **Multi-dataset training** — Supports five major public benchmarks (FaceForensics++, Celeb-DF, DFDC, DFD, DeepFake-TIMIT) for robustness across ~20 synthesis methods.
-- **End-to-end pipeline** — From raw videos to trained model: frame extraction → face cropping (MTCNN or Azure Vision API) → dataset balancing & split → training.
-- **Live web demo** — Try the model at [deepfake-detect.com](https://deepfake-detect.com/) without installing anything.
+This project is a **Deepfake Detector** — it's like a smart detective 🕵️ that looks at a photo of a face and says:
+- ✅ **"This face looks REAL!"**
+- ❌ **"This face looks FAKE / SYNTHETIC!"**
 
 ---
 
-## Demo
+## ✨ How Does It Work? (Simple Version)
 
-<p align="center">
-  <img src="img/demo.gif" alt="DeepFake-Detect demo: upload image and get deepfake detection score" width="85%" />
-</p>
+Think of it like training a dog 🐶 to sniff out fake money:
 
-<p align="center">
-  <strong><a href="https://deepfake-detect.com/">Try the live demo → deepfake-detect.com</a></strong>
-</p>
+1. 📹 **Show it lots of videos** — both real faces and fake faces
+2. ✂️ **Crop out just the faces** from every video frame
+3. ⚖️ **Balance the dataset** — equal real and fake faces for fair learning
+4. 🧠 **Teach the AI** — it studies all the faces until it can tell them apart
+5. 🌐 **Use the web app** — upload any photo and get an instant answer!
 
 ---
 
-## Quick Start
+## 🗂️ File Structure — What's Inside This Project?
 
-### Prerequisites
+```
+DeepFake-Detect/
+│
+├── 📄 README.md                          ← You are reading this file!
+├── 📄 requirements.txt                   ← List of tools the project needs
+├── 📄 LICENSE                            ← Legal info (MIT open source)
+│
+├── 🎬 00-convert_video_to_image.py       ← STEP 1: Breaks videos into pictures
+├── ✂️  01a-crop_faces_with_mtcnn.py      ← STEP 2a: Cuts out just the faces
+├── ☁️  01b-crop_faces_with_azure-...py   ← STEP 2b: Face cropping using Azure cloud
+├── ⚖️  02-prepare_fake_real_dataset.py   ← STEP 3: Balances real vs fake images
+├── 🧠 03-train_cnn.py                    ← STEP 4: Teaches the AI to detect fakes
+│
+├── 🌐 app.py                             ← The web app server (run this to use it!)
+│
+├── 📁 templates/
+│   └── index.html                        ← The webpage you see in the browser
+│
+├── 📁 static/
+│   ├── style.css                         ← Makes the webpage look beautiful
+│   ├── app.js                            ← Makes the webpage interactive
+│   └── temp/                             ← Stores temporary result images
+│
+├── 📁 train_sample_videos/               ← Sample videos + metadata.json
+├── 📁 prepared_dataset/                  ← Balanced real & fake face images
+├── 📁 split_dataset/                     ← Train / Validation / Test folders
+├── 📁 tmp_fake_faces/                    ← Temporary fake faces during processing
+├── 📁 tmp_checkpoint/
+│   └── best_model.h5                     ← 🏆 The trained AI brain (saved here!)
+├── 📁 tmp_debug/                         ← Debug files during training
+└── 📁 img/                               ← Screenshots used in this README
+```
 
-- **Python 3**
-- **Keras**
-- **TensorFlow**
-- **EfficientNet** for TensorFlow Keras
-- **OpenCV** on Wheels
-- **MTCNN** (or **Azure Computer Vision API** for cloud-based face cropping)
+---
 
-### Install & run pipeline
+## 🚀 How to Use This Project (Step by Step)
+
+### ✅ Step 0 — Install Requirements
+
+Make sure you have **Python 3** installed. Then open a terminal and run:
 
 ```bash
-# Clone and install dependencies
-git clone https://github.com/aaronchong888/DeepFake-Detect.git
-cd DeepFake-Detect
 pip install -r requirements.txt
-
-# Run the full pipeline (after placing your dataset videos as expected by the scripts)
-python 00-convert_video_to_image.py    # Extract frames
-python 01a-crop_faces_with_mtcnn.py    # Crop faces (or 01b for Azure)
-python 02-prepare_fake_real_dataset.py # Balance & split train/val/test
-python 03-train_cnn.py                 # Train EfficientNet classifier
 ```
+
+This installs all the tools the project needs (like TensorFlow, OpenCV, MTCNN).
 
 ---
 
-## Training Datasets
+### 🎬 Step 1 — Extract Frames from Videos
 
-The model is trained on the following public deepfake datasets to cover diverse identities and synthesis methods:
-
-| Dataset | Link |
-|---------|------|
-| DeepFake-TIMIT | [https://www.idiap.ch/dataset/deepfaketimit](https://www.idiap.ch/dataset/deepfaketimit) |
-| FaceForensics++ | [https://github.com/ondyari/FaceForensics](https://github.com/ondyari/FaceForensics) |
-| Google DFD | [https://ai.googleblog.com/2019/09/contributing-data-to-deepfake-detection.html](https://ai.googleblog.com/2019/09/contributing-data-to-deepfake-detection.html) |
-| Celeb-DF | [https://github.com/danmohaha/celeb-deepfakeforensics](https://github.com/danmohaha/celeb-deepfakeforensics) |
-| Facebook DFDC | [https://ai.facebook.com/datasets/dfdc/](https://ai.facebook.com/datasets/dfdc/) |
-
-<p align="center">
-  <img src="img/sample_dataset.png" alt="DeepFake-Detect training dataset sample: real vs deepfake face images" width="85%" />
-</p>
-
-**Aggregate scale (approximate):** ~134,446 videos · ~1,140 identities · ~20 synthesis methods.
-
----
-
-## Pipeline Overview
-
-| Step | Script | Description |
-|------|--------|-------------|
-| **0** | `00-convert_video_to_image.py` | Extract frames from videos; resize by width (2× if &lt;300px, 1× for 300–1000px, 0.5× for 1000–1900px, 0.33× if &gt;1900px). |
-| **1a** | `01a-crop_faces_with_mtcnn.py` | Crop faces with [MTCNN](https://github.com/ipazc/mtcnn) (30% margin, 95% confidence). Multiple faces per frame saved separately. |
-| **1b** | `01b-crop_faces_with_azure-vision-api.py` | Optional: use [Azure Computer Vision API](https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision/) for face cropping (set API name & key in script). |
-| **2** | `02-prepare_fake_real_dataset.py` | Down-sample fakes to match real count; split into train/val/test (e.g. 80:10:10). |
-| **3** | `03-train_cnn.py` | Train EfficientNet B0 backbone → global max pooling → 2× FC (ReLU) → sigmoid. Input 128×128 RGB; output probability pristine (1) vs deepfake (0). |
-
-
-#### Step 0 - Convert video frames to individual images
-
-```
+```bash
 python 00-convert_video_to_image.py
 ```
 
-Extract all the video frames from the acquired deepfake datasets above, saving them as individual images for further processing. In order to cater for different video qualities and to optimize for the image processing performance, the following image resizing strategies were implemented:
+📌 **What it does:** Takes every video in the `train_sample_videos/` folder and saves each frame as a separate image (like taking screenshots every second).
 
-- 2x resize for videos with width less than 300 pixels
-- 1x resize for videos with width between 300 and 1000 pixels
-- 0.5x resize for videos with width between 1000 and 1900 pixels
-- 0.33x resize for videos with width greater than 1900 pixels
+🖼️ It also automatically resizes images based on their size for best performance.
 
-#### Step 1 - Extract faces from the deepfake images with MTCNN
+---
 
-```
+### ✂️ Step 2 — Crop the Faces
+
+```bash
 python 01a-crop_faces_with_mtcnn.py
 ```
 
-Further process the frame images to crop out the facial parts in order to allow the neural network to focus on capturing the facial manipulation artifacts. In cases where there are more than one subject appearing in the same video frame, each detection result is saved separately to provide better variety for the training dataset.
+📌 **What it does:** Looks at each frame image and finds the face in it. Then it zooms in and saves just the face (with a 30% border around it for context).
 
-- The pre-trained MTCNN model used is coming from this GitHub repo: https://github.com/ipazc/mtcnn
-- Added 30% margins from each side of the detected face bounding box
-- Used 95% as the confidence threshold to capture the face images
+> **Optional:** If you don't have a good GPU, you can use `01b-crop_faces_with_azure-vision-api.py` instead — it uses Microsoft's cloud service. You'll need to add your own API key first.
 
-#### (Optional) Step 1b - Extract faces from the deepfake images with Azure Computer Vision API
+---
 
-In case you do not have a good enough hardware to run MTCNN, or you want to achieve a faster execution time, you may choose to run **01b** instead of **01a** to leverage the [Azure Computer Vision API](https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision/) for facial recognition.
+### ⚖️ Step 3 — Prepare the Dataset
 
-```
-python 01b-crop_faces_with_azure-vision-api.py
-```
-
-> Replace the missing parts (*API Name* & *API Key*) before running
-
-#### Step 2 - Balance and split datasets into various folders
-
-```
+```bash
 python 02-prepare_fake_real_dataset.py
 ```
 
-As we observed that the number of fakes are much larger than the number of real faces (due to the fact that one real video is usually used for creating multiple deepfakes), we need to perform a down-sampling on the fake dataset based on the number of real crops, in order to tackle for possible class imbalance issues during the training phase. 
+📌 **What it does:** 
+- Collects all the real faces and fake faces
+- Makes sure there are **equal numbers of real and fake** (so the AI doesn't get biased)
+- Splits them into 3 groups:
+  - **80% Training** — the AI studies these
+  - **10% Validation** — used to check learning during training
+  - **10% Testing** — used to test the final AI at the end
 
-We also need to split the dataset into training, validation and testing sets (for example, in the ratio of 80:10:10) as the final step in the data preparation phase.
+---
 
-#### Step 3 - Model training
+### 🧠 Step 4 — Train the AI
 
-```
+```bash
 python 03-train_cnn.py
 ```
 
-EfficientNet is used as the backbone for the development work. Given that most of the deepfake videos are synthesized using a frame-by-frame approach, we have formulated the deepfake detection task as a binary classification problem such that it would be generally applicable to both video and image contents.
+📌 **What it does:** This is where the magic happens! 🎩 It teaches the **EfficientNet-B0** neural network to recognize deepfake faces. It:
+- Runs for up to **20 rounds** (called epochs)
+- Automatically stops early if it's not getting better
+- Saves the best version of the AI to `tmp_checkpoint/best_model.h5`
 
-In this code sample, we have adapted the EfficientNet B0 model in several ways: The top input layer is replaced by an input size of 128x128 with a depth of 3, and the last convolutional output from B0 is fed to a global max pooling layer. In addition, 2 additional fully connected layers have been introduced with ReLU activations, followed by a final output layer with Sigmoid activation to serve as a binary classifier. 
-
-Thus, given a colored square image as the network input, we would expect the model to compute an output between 0 and 1 that indicates the probability of the input image being either deepfake (0) or pristine (1).
-
----
-
-## FAQ
-
-**How do I detect if an image is a deepfake?**  
-Use the [live demo](https://deepfake-detect.com/) or run the trained model on a face crop (128×128). The model outputs a score: higher = more likely pristine, lower = more likely synthetic.
-
-**Can I train on my own deepfake dataset?**  
-Yes. Follow the pipeline: put videos in the expected layout, run the scripts in order (frame extraction → face crop → prepare dataset → train). You can mix your data with the public datasets.
-
-**What deepfake methods does this detect?**  
-The default model is trained on ~20 methods across FaceForensics++, Celeb-DF, DFDC, DFD, and DeepFake-TIMIT, so it generalizes to many common face-swap and manipulation techniques.
+> ⚠️ **Important:** The more training data you have, the smarter the AI becomes! The 5 sample videos included are just for testing the pipeline — download a real dataset for accurate results.
 
 ---
 
-## Star History
+### 🌐 Step 5 — Launch the Web App!
 
-[![Star History Chart](https://api.star-history.com/svg?repos=aaronchong888/DeepFake-Detect&type=Date)](https://star-history.com/#aaronchong888/DeepFake-Detect&Date)
+```bash
+python app.py
+```
+
+📌 **What it does:** Starts a local website on your computer. Open your browser and go to:
+
+## 👉 http://127.0.0.1:5000
+
+You can now:
+1. 📤 **Upload any face image** (drag & drop or browse)
+2. 🔬 **Wait for analysis** (the AI scans the face in seconds)
+3. 🟢 See **REAL / PRISTINE** or 🔴 **SYNTHETIC / FAKE** verdict
+4. 📊 View the **confidence score** (how sure the AI is)
+5. 🌡️ See the **Forgery Heatmap** — highlights exactly where the face looks suspicious!
 
 ---
 
-## Contributing
+## 🌡️ What is the Forgery Heatmap?
 
-Contributions are welcome. Please open an [issue](https://github.com/aaronchong888/DeepFake-Detect/issues) or submit a [pull request](https://github.com/aaronchong888/DeepFake-Detect/pulls).
+After the analysis, you'll see **two images side by side**:
+
+| Original Face | Forgery Map |
+|---|---|
+| The face as cropped by the AI | A thermal overlay showing suspicious zones |
+| 🧍 Normal face photo | 🔴 Red = highly suspicious area |
+
+**How to read the heatmap:**
+- 🔴 **Red/Orange = HOT zones** → The AI found something suspicious here
+- 🔵 **Blue/Green = COLD zones** → These areas look normal
+- If the verdict is FAKE, the red zones show WHERE the face was digitally altered!
 
 ---
 
-## Citing
+## 🧠 What AI Model Does It Use?
 
-If you use DeepFake-Detect in research or a project, please cite:
+This project uses **EfficientNet-B0** — a state-of-the-art neural network originally trained on millions of images from the internet (ImageNet). We then fine-tune it to focus on deepfake detection.
 
-```bibtex
-@software{deepfake_detect,
-  title = {DeepFake-Detect: Open-Source Deepfake Detection Pipeline},
-  author = {Chong, Aaron and Ng, See Long Hugo},
-  year = {2020},
-  url = {https://github.com/aaronchong888/DeepFake-Detect},
-  note = {Train deepfake detection models with TensorFlow, Keras \& EfficientNet}
-}
+The architecture:
+```
+Input Image (128x128 pixels)
+        ↓
+EfficientNet-B0 Backbone (feature extractor)
+        ↓
+Global Max Pooling
+        ↓
+Dense Layer (512 neurons) → ReLU → Dropout
+        ↓
+Dense Layer (128 neurons) → ReLU
+        ↓
+Output: Single value between 0.0 and 1.0
+  → Close to 1.0 = REAL ✅
+  → Close to 0.0 = FAKE ❌
 ```
 
 ---
 
-## Authors & License
+## 📦 Training Datasets
 
-- **[Aaron Chong](https://github.com/aaronchong888)** — *Initial work & Maintenance*
-- **[Hugo Ng](https://github.com/hugoclong)** — *Initial work*
+For accurate detection, train on these public deepfake datasets:
 
-See [contributors](https://github.com/aaronchong888/DeepFake-Detect/contributors) for the full list.
+| Dataset | Description |
+|---|---|
+| [DeepFake-TIMIT](https://www.idiap.ch/dataset/deepfaketimit) | Early deepfake benchmark |
+| [FaceForensics++](https://github.com/ondyari/FaceForensics) | ~1000 videos, multiple methods |
+| [Google DFD](https://ai.googleblog.com/2019/09/contributing-data-to-deepfake-detection.html) | Google's deepfake dataset |
+| [Celeb-DF](https://github.com/danmohaha/celeb-deepfakeforensics) | Celebrity deepfakes |
+| [Facebook DFDC](https://ai.facebook.com/datasets/dfdc/) | Facebook's 100K+ videos |
 
-**License:** [MIT](LICENSE).
+---
 
-**Acknowledgments:** Dependencies are listed in the [dependency graph](https://github.com/aaronchong888/DeepFake-Detect/network/dependencies).
+## ❓ Common Questions
 
+**Q: Why does it say REAL for all my test images?**
+> The model included was trained on only 5 sample videos (very tiny!). Download and use a large real dataset to get accurate predictions.
 
+**Q: Can I upload any photo from the internet?**
+> Yes! Just go to `http://127.0.0.1:5000`, upload the image, and get your result instantly.
+
+**Q: How long does training take?**
+> On a CPU without a GPU, it can take hours for large datasets. Using a GPU (via WSL2 on Windows) speeds it up significantly.
+
+**Q: What image types are supported?**
+> JPEG, PNG, and WEBP are all supported.
+
+---
+
+## 🛠️ Built With
+
+| Tool | What it Does |
+|---|---|
+| Python 3 | The programming language |
+| TensorFlow + Keras | Builds and trains the AI |
+| EfficientNet-B0 | The AI brain architecture |
+| MTCNN | Detects and crops faces |
+| OpenCV | Reads and processes images |
+| Flask | Runs the local web server |
+| HTML + CSS + JS | Makes the web interface look great |
+
+---
+
+## 📝 License
+
+This project is open source under the **MIT License** — you can use it freely for learning, research, or building your own tools!
+
+---
+
+## 👨‍💻 Authors
+
+- **Aaron Chong** — [GitHub](https://github.com/aaronchong888)
+- **Hugo Ng** — [GitHub](https://github.com/hugoclong)
+
+---
+
+*Made with ❤️ to help fight misinformation and deepfake content.*

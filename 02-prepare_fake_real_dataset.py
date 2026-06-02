@@ -1,9 +1,8 @@
 import json
 import os
-from distutils.dir_util import copy_tree
 import shutil
 import numpy as np
-import split_folders
+import splitfolders
 
 base_path = '.\\train_sample_videos\\'
 dataset_path = '.\\prepared_dataset\\'
@@ -39,10 +38,10 @@ for filename in metadata.keys():
     if os.path.exists(tmp_path):
         if metadata[filename]['label'] == 'REAL':    
             print('Copying to :' + real_path)
-            copy_tree(tmp_path, real_path)
+            shutil.copytree(tmp_path, real_path, dirs_exist_ok=True)
         elif metadata[filename]['label'] == 'FAKE':
             print('Copying to :' + tmp_fake_path)
-            copy_tree(tmp_path, tmp_fake_path)
+            shutil.copytree(tmp_path, tmp_fake_path, dirs_exist_ok=True)
         else:
             print('Ignored..')
 
@@ -61,5 +60,5 @@ for fname in random_faces:
 print('Down-sampling Done!')
 
 # Split into Train/ Val/ Test folders
-split_folders.ratio(dataset_path, output='split_dataset', seed=1377, ratio=(.8, .1, .1)) # default values
+splitfolders.ratio(dataset_path, output='split_dataset', seed=1377, ratio=(.8, .1, .1)) # default values
 print('Train/ Val/ Test Split Done!')
