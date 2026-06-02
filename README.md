@@ -240,6 +240,4 @@ For accurate detection, train on these public deepfake datasets:
 This project is open source under the **MIT License** — you can use it freely for learning, research, or building your own tools!
 
 ---
-
-
 *Made with ❤️ to help fight misinformation and deepfake content.*
